@@ -1,4 +1,4 @@
-// A more modern, concise way to protect routes
+// middleware.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher([
@@ -7,19 +7,12 @@ const isProtectedRoute = createRouteMatcher([
   "/collection(.*)",
 ]);
 
-export default clerkMiddleware((auth, req) => { // clerkMiddleware now takes a function
+export default clerkMiddleware((auth, req) => {
   if (isProtectedRoute(req)) {
-    // If it's a protected route, Clerk automatically redirects 
-    // to the sign-in page if not authenticated.
-    auth().protect();
+    auth().protect(); 
   }
-}); 
+});
 
-// If you need more complex logic (like your original code), 
-// you can still use the afterAuth property:
-// export default clerkMiddleware({ afterAuth(auth, req) { ... } }); 
-
-// export const config remains the same
 export const config = {
   matcher: [
     "/((?!_next|.*\\..+).*)",
