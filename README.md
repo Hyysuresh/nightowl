@@ -17,7 +17,7 @@ Built using Next.js, Clerk, Prisma ORM, TailwindCSS & Arcjet Security.
 ---
 
 ## 🚀 Live Demo  
-👉 Coming soon (Vercel Deployment)
+👉 Coming soon (Vercel Deploy)
 
 ---
 
