@@ -3,12 +3,15 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
   "/journal(.*)",
-  "/collection(.*)"
+  "/collection(.*)",
 ]);
 
 export default clerkMiddleware((auth, req) => {
-  if (isProtectedRoute(req)) {
-    auth().protect();
+  const { userId } = auth();
+
+  // Block only if NOT logged in AND trying to access protected routes
+  if (!userId && isProtectedRoute(req)) {
+    return auth().redirectToSignIn({ returnBackUrl: req.url });
   }
 });
 
