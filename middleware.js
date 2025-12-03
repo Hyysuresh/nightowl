@@ -1,54 +1,63 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import arcjet, { createMiddleware, detectBot, shield } from "@arcjet/next";
 import { NextResponse } from "next/server";
 
-// Protected routes that require authentication
-const isProtectedRoute = createRouteMatcher([
-  "/dashboard(.*)",
-  "/journal(.*)",
-  "/collection(.*)",
-]);
+// Lazy load heavy modules only when needed (reduces edge bundle size)
+const loadClerk = () => import("@clerk/nextjs/server");
+const loadArcjet = () => import("@arcjet/next");
 
-// Create Arcjet middleware
-const aj = arcjet({
-  key: process.env.ARCJET_KEY,
-  // characteristics: ["userId"], // Track based on Clerk userId
-  rules: [
-    // Shield protection for content and security
-    shield({
-      mode: "LIVE",
-    }),
-    detectBot({
-      mode: "LIVE", // will block requests. Use "DRY_RUN" to log only
-      allow: [
-        "CATEGORY:SEARCH_ENGINE", // Google, Bing, etc
-        // See the full list at https://arcjet.com/bot-list
-      ],
-    }),
-  ],
-});
+// Protected routes matcher
+const protectedRoutes = ["/dashboard", "/journal", "/collection"];
 
-// Create base Clerk middleware
-const clerk = clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+function isProtectedRoute(pathname) {
+  return protectedRoutes.some((route) => pathname.startsWith(route));
+}
 
-  if (!userId && isProtectedRoute(req)) {
-    const { redirectToSignIn } = await auth();
-    return redirectToSignIn();
-  }
+export default async function middleware(req) {
+  const url = new URL(req.url);
 
-  return NextResponse.next();
-});
+  // ----- ARCJET -----
+  const { default: arcjet, createMiddleware, detectBot, shield } = await loadArcjet();
 
-// Chain middlewares - ArcJet runs first, then Clerk
-export default createMiddleware(aj, clerk);
+  const aj = arcjet({
+    key: process.env.ARCJET_KEY,
+    rules: [
+      shield({ mode: "LIVE" }),
+      detectBot({
+        mode: "LIVE",
+        allow: ["CATEGORY:SEARCH_ENGINE"],
+      }),
+    ],
+  });
 
-// Keep your existing matcher config for consistency
+  // Run Arcjet first
+  const ajResult = await createMiddleware(aj)(req);
+  if (ajResult) return ajResult;
+
+  // ----- CLERK -----
+  const { clerkMiddleware, createRouteMatcher } = await loadClerk();
+
+  const matcher = createRouteMatcher([
+    "/dashboard(.*)",
+    "/journal(.*)",
+    "/collection(.*)",
+  ]);
+
+  const clerk = clerkMiddleware(async (authFn, reqObj) => {
+    const { userId, redirectToSignIn } = await authFn();
+
+    if (!userId && matcher(reqObj)) {
+      return redirectToSignIn();
+    }
+
+    return NextResponse.next();
+  });
+
+  return clerk(req);
+}
+
+// Vercel matcher (unchanged)
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
     "/(api|trpc)(.*)",
   ],
 };
