@@ -14,16 +14,16 @@ export default clerkMiddleware({
   ],
 
   afterAuth(auth, req) {
-    const { userId, redirectToSignIn } = auth;
+    const { userId, redirectToSignUp } = auth;
 
-    // NOT logged in AND trying to access protected route
+    // If logged out AND trying to access protected route → go to SIGN-UP
     if (!userId && isProtectedRoute(req)) {
-      return redirectToSignIn({
+      return redirectToSignUp({
         returnBackUrl: req.url,
       });
     }
 
-    // Logged in user or public route → allow
+    // Allow all other cases
     return;
   },
 });
