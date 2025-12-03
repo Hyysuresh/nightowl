@@ -50,12 +50,14 @@ Built using Next.js, Clerk, Prisma ORM, TailwindCSS & Arcjet Security.
 ### **Database & ORM**
 <p align="center">
   <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" />
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
 </p>
 
 ### **Security**
 <p align="center">
   <img src="https://img.shields.io/badge/Arcjet-0A71FF?style=for-the-badge&logoColor=white" />
 </p>
+
 
 ---
 
@@ -134,7 +136,7 @@ This project is licensed under the **MIT License**.
 ---
 
 <p align="center">
-  <img src="https://media2.giphy.com/media/83blalZ6qfKcU/giphy.gif" width="300" />
+  <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGYzYXMwamxkZnQ5ZTE1YjZyN3I2MTR1azlodG40dnkwNHFsNXo4dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ui1hpJSyBDWlG/giphy.gif" width="300" />
 </p>
 
 <p align="center">✨ Built with passion by Krishna ✨</p>
