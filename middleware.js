@@ -1,4 +1,3 @@
-// middleware.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher([
@@ -7,21 +6,15 @@ const isProtectedRoute = createRouteMatcher([
   "/collection(.*)",
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
-  const { userId, redirectToSignIn } = await auth();
-
-  // If user not logged in & route is protected → redirect to sign-in
-  if (!userId && isProtectedRoute(req)) {
-    return redirectToSignIn();
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req)) {
+    auth().protect();
   }
-
-  // Otherwise continue normally
-  return NextResponse.next();
 });
 
 export const config = {
   matcher: [
-    "/((?!_next|.*\\..+).*)", 
+    "/((?!_next|.*\\..+).*)",
     "/(api|trpc)(.*)",
   ],
 };
