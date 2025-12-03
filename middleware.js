@@ -7,16 +7,24 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware({
-  beforeAuth: (req) => {
-    // Nothing here — optional
-  },
-  afterAuth: (auth, req, evt) => {
-    const { userId } = auth;
+  publicRoutes: [
+    "/",
+    "/sign-in(.*)",
+    "/sign-up(.*)",
+  ],
 
-    // Block protected routes if not logged in
+  afterAuth(auth, req) {
+    const { userId, redirectToSignIn } = auth;
+
+    // NOT logged in AND trying to access protected route
     if (!userId && isProtectedRoute(req)) {
-      return auth.redirectToSignIn({ returnBackUrl: req.url });
+      return redirectToSignIn({
+        returnBackUrl: req.url,
+      });
     }
+
+    // Logged in user or public route → allow
+    return;
   },
 });
 
