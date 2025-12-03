@@ -3,14 +3,16 @@ import { NextResponse } from "next/server";
 const loadClerk = () => import("@clerk/nextjs/server");
 const loadArcjet = () => import("@arcjet/next");
 
-// Protected routes
 const protectedRoutes = ["/dashboard", "/journal", "/collection"];
 
+// -----------------------------------------------------
+// MAIN MIDDLEWARE
+// -----------------------------------------------------
 export default async function middleware(req) {
   const url = new URL(req.url);
   const pathname = url.pathname;
 
-  // ---------- ARCJET ----------
+  // ---------------- ARCJET ----------------
   const { default: arcjet, createMiddleware, detectBot, shield } = await loadArcjet();
 
   const aj = arcjet({
@@ -24,17 +26,16 @@ export default async function middleware(req) {
     ],
   });
 
-  // Arcjet first
-  const arcResult = await createMiddleware(aj)(req);
-  if (arcResult) return arcResult;
+  const ajResult = await createMiddleware(aj)(req);
+  if (ajResult) return ajResult;
 
-  // ---------- CLERK ----------
-  const { auth, redirectToSignIn } = await loadClerk().then((m) => m);
+  // ---------------- CLERK ----------------
+  const Clerk = await loadClerk();
+  const { userId, redirectToSignIn } = await Clerk.auth();
 
-  const { userId } = await auth();
-
-  const isProtected =
-    protectedRoutes.some((route) => pathname.startsWith(route));
+  const isProtected = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
   if (isProtected && !userId) {
     return redirectToSignIn({ returnBackUrl: req.url });
@@ -43,6 +44,9 @@ export default async function middleware(req) {
   return NextResponse.next();
 }
 
+// -----------------------------------------------------
+// MATCHER CONFIG
+// -----------------------------------------------------
 export const config = {
   matcher: [
     "/((?!_next|.*\\..+).*)",
