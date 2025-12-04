@@ -16,8 +16,8 @@ Built using Next.js, Clerk, Prisma ORM, TailwindCSS & Arcjet Security.
 
 ---
 
-## 🚀 Live Demo  
-👉 Coming soon (Vercel Deploy)
+## 🌐 Live Demo  
+✨ Explore the app here: https://nightowl-journal.vercel.app/
 
 ---
 
