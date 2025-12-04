@@ -253,12 +253,19 @@ export default async function LandingPage() {
             </h2>
 
             <p className="text-lg text-blue-800 mb-8 max-w-2xl mx-auto">
-              Join thousands of writers who’ve found clarity, peace, and creativity through journaling.
+              Join thousands of writers who&rsquo;ve found clarity, peace, and creativity through journaling.
             </p>
 
-            <Button size="lg" variant="journal" className="animate-bounce bg-blue-700 hover:bg-blue-800 text-white">
-              Get Started for Free <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
+            {/* UPDATED BUTTON - Changed from simple Button to Link */}
+            <Link href="/sign-in?redirect_url=/dashboard">
+              <Button 
+                size="lg" 
+                variant="journal" 
+                className="animate-bounce bg-blue-700 hover:bg-blue-800 text-white"
+              >
+                Get Started for Free <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>
