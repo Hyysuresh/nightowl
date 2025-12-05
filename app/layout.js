@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
           {/* Footer */}
           <footer className="py-12 bg-opacity-10 relative z-10">
             <div className="container mx-auto px-4 text-center text-gray-900 dark:text-gray-200">
-              <p>Made with 💙 by Krisha</p>
+              <p>Made with 💙 by Krishna</p>
             </div>
           </footer>
 
