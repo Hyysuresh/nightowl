@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres # The PostgreSQL user (username)
+      POSTGRES_PASSWORD: mypass # The PostgreSQL password
+      POSTGRES_DB: nightowl
+    volumes:
+      - postgres_data:/var/lib/postgresql/18/docker
+    restart: always
+    networks:
+      - night
+  nightowl:
+    build:
+      context: .
+    container_name: nightowl
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    networks:
+      - night
+    env_file:
+      - ./.env
+volumes:
+  postgres_data:
+networks:
+  night:
+
+  
