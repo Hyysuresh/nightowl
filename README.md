@@ -33,6 +33,7 @@ Built using Next.js, Clerk, Prisma ORM, TailwindCSS & Arcjet Security.
 
 ---
 
+
 ## 🛠️ Tech Stack
 
 ### **Frontend**
@@ -59,6 +60,106 @@ Built using Next.js, Clerk, Prisma ORM, TailwindCSS & Arcjet Security.
 </p>
 
 
+---
+
+
+# ⚙️ DevOps Implementation (Production Setup)
+
+This project is deployed using a complete DevOps pipeline with automation, security, and production-grade configuration.
+
+---
+
+## 🚀 CI/CD Pipeline (Jenkins)
+
+* Integrated **GitHub Webhooks** to automatically trigger builds
+* Designed a **multi-stage Jenkins pipeline**:
+
+  * Code checkout
+  * Docker image build
+  * Security scanning using Trivy
+  * Push to DockerHub
+  * Automated deployment
+
+---
+
+## 🐳 Containerization
+
+* Application containerized using **Docker (multi-stage build)**
+* Managed multi-container setup using **Docker Compose**:
+
+  * App container
+  * PostgreSQL database
+
+---
+
+## 🔄 Automated Deployment
+
+* Created custom **`deploy.sh` script** for:
+
+  * Pull latest code
+  * Rebuild Docker images
+  * Restart containers
+  * Perform health checks
+
+---
+
+## 🛡️ Security (DevSecOps)
+
+* Integrated **Trivy** for container vulnerability scanning
+* Ensured only secure images are deployed in production
+
+---
+
+## 🌐 Reverse Proxy & HTTPS
+
+* Configured **Nginx as reverse proxy**
+
+* Connected custom domain:
+  👉 https://app.dealgo.food
+
+* Enabled **HTTPS using Let's Encrypt SSL**
+
+* Implemented secure traffic routing
+
+---
+
+## ❤️ Health Check & Reliability
+
+* Implemented **application health check using curl**
+* Ensured container reliability using restart policies
+
+---
+
+## 📊 Logging
+
+* Used **Docker logs** for debugging and monitoring
+* Enabled basic logging for deployment tracking
+
+---
+
+## 🧠 DevOps Workflow
+
+```mermaid
+graph LR;
+A[GitHub Push] --> B[Jenkins Pipeline];
+B --> C[Build Docker Image];
+C --> D[Trivy Scan];
+D --> E[Push to DockerHub];
+E --> F[Deploy using Script];
+F --> G[Docker Compose Run];
+G --> H[Nginx + HTTPS];
+```
+
+---
+
+## 💼 DevOps Highlights
+
+* End-to-end **CI/CD pipeline implementation**
+* Real-world **production deployment with domain & SSL**
+* **DevSecOps integration** with Trivy
+* Automated deployment using **shell scripting**
+* Container orchestration using **Docker Compose**
+  
 ---
 
 ## 📸 Screenshots
@@ -89,40 +190,39 @@ cd nightowl-journal-app
 ---
 
 ### **2️⃣ Install dependencies**
-```bash
-npm install
+run this command all dependence install in one click
+```
+chmod 754 install.sh
+```
+```
+./install.sh
 ```
 
 ---
 
 ### **3️⃣ Setup environment variables**
-Create `.env.local` in the root:
+copy `.env.local` in the root:
 
-```ini
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_key
-CLERK_SECRET_KEY=your_key
-DATABASE_URL=your_postgres_url
-ARCJET_KEY=your_arcjet_key
+```
+cp env.local .env
 ```
 
 ---
+### **4️⃣ docker compose up**
 
-### **4️⃣ Apply Prisma migrations**
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
 ```
-
+docker compose up -d --build
+```
 ---
 
-### **5️⃣ Start development server**
-```bash
-npm run dev
-```
 
 Open → http://localhost:3000
 
 ---
+
+
+---
+
 
 ## 🤝 Contributing
 Contributions are welcome!  
