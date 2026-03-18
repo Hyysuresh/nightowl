@@ -1,5 +1,5 @@
 # ---------- BUILDER ---------
-FROM node:20-slim AS builder
+FROM node:20-slim 
 
 # work directory
 WORKDIR /app
@@ -18,17 +18,6 @@ COPY . .
 RUN npx prisma generate
 # build app
 RUN npm run build
-
-# # ---------- RUNNER ---------
-# FROM gcr.io/distroless/nodejs20-debian13
-
-# WORKDIR /app
-
-# COPY --from=builder /app/node_modules ./node_modules
-# COPY --from=builder /app/.next/ ./.next/
-# COPY --from=builder /app/package.json ./package.json
-
-
 # expose 3000
 EXPOSE 3000
 
