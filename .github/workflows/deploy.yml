@@ -1,0 +1,25 @@
+name: nightowl 
+
+on:
+  push:
+    branches:
+      - main 
+  workflow_dispatch:
+jobs:
+  deploy:
+    run-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS 
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT}}
+          script: |
+            cd ~/nightowl
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart nightowl || pm2 start npm --name "nightowl" -- start

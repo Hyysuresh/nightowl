@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1 
+metadata:
+  name: postres-deployment
+  namespace: nightowl 
+  labels: night
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: night
+  template:
+    metadata:
+      Labels:
+        app: night
+    spec:
+      containers:
+        - name: postres 
+          image: postgres:latest
+          ports:
+            - containerPorts: 5432
+               

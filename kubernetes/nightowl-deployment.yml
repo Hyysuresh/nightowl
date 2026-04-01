@@ -1,0 +1,19 @@
+kind: Deployment 
+apiVersion: apps/v1 
+metadata:
+  name: nightowl-deployment 
+  namespace: nightowl
+  labels: nightowl-main
+spec:
+  replicas: 2
+  selector:
+    matchLables:
+      app: nightowl-main 
+  template:
+    metadata:
+      Labels:
+        app: nightowl-main 
+    spec:
+      containers:
+        - name: nightowl 
+          image: 
