@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 jobs:
   deploy:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Deploy to VPS 
