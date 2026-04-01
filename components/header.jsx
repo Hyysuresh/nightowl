@@ -39,7 +39,7 @@ async function Header() {
           </Link>
           <SignedOut>
             <SignInButton forceRedirectUrl="/dashboard">
-              <Button variant="outline">Login</Button>
+              <Button variant="outline">Logining</Button>
             </SignInButton>
           </SignedOut>
           <SignedIn>
